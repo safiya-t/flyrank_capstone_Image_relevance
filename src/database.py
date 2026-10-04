@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
+from src.models import Base
+
 load_dotenv()
 
 database_url = os.getenv("DATABASE_URL")
@@ -13,6 +15,10 @@ if not database_url:
 
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
+
+def create_tables() -> None:
+    Base.metadata.create_all(bind=engine)
 
 
 def get_db() -> Generator[Session, None, None]:
